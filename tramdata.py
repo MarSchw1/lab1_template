@@ -14,8 +14,26 @@ def build_tram_stops(jsonobject):
     pass
 
 def build_tram_lines(lines):
-    ## YOUR CODE HERE
-    pass
+    tram_lines = {}
+    
+    with open(lines) as file:
+        opened_file = file.readlines()
+        while opened_file != '\n':
+            stops = []
+            for i in opened_file:
+                if i[0].isdigit():
+                    tramline = i.strip('\n').replace(":","")
+                if i[0].isalpha():
+                    i = i.strip('\n').split()
+                    name = i[:-1]
+                    if len(name) == 2:
+                        name = " ".join(name)
+                    else: name = name[0]
+                    stops.append(name)
+            tram_lines.setdefault(tramline,stops)
+        return tram_lines
+print(build_tram_lines(LINE_FILE))
+
 
 def build_tram_network(stopfile, linefile):
     ## YOUR CODE HERE
