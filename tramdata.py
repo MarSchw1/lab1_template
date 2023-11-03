@@ -35,14 +35,14 @@ def build_tram_lines(lines):
                     lines = lines.strip('\n').split()
                     name = lines[:-1]
                     time = lines[-1]
-                    if len(name) == 2:
+                    if len(name) != 1:
                         name = " ".join(name)
                     else: name = name[0]
                     tram_lines[tramline].append(name)
                 if lines[0] in ['\n', ' ']:
                     A = False
         return tram_lines
-#print(build_tram_lines(LINE_FILE))
+print(build_tram_lines(LINE_FILE))
 
 
 def build_tram_network(stopfile, linefile):
