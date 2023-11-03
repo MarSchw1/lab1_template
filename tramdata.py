@@ -49,14 +49,6 @@ def build_tram_lines(lines):
                 if lines[0].isdigit():
                     tramline = lines.strip('\n').replace(":","")
                     tram_lines.setdefault(tramline,stops)
-                '''if lines[0].isdigit() or lines[0:1].isdigit():
-                    lines = lines.strip("\n")
-                    lines = lines.replace(":", "")
-                    if len(lines) == 1:
-                        tramline = str(lines[0])
-                    elif len(lines) == 2:
-                        tramline = str(lines[0:2])
-                    tram_lines.setdefault(tramline, stops)'''
                 if lines[0].isalpha():
                     lines = lines.strip('\n').split()
                     name = lines[:-1]
