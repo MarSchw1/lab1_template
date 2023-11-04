@@ -25,7 +25,7 @@ def build_tram_lines(lines):
                 stops.append(name)
             tram_lines.setdefault(number,stops)
         return tram_lines
-print(build_tram_lines(LINE_FILE))
+#print(build_tram_lines(LINE_FILE))
 
 # Detta är ett äldre försök som inte fungerar som det ska. Vissa delar gör dock det.
 '''tram_lines = {}
@@ -47,6 +47,6 @@ print(build_tram_lines(LINE_FILE))
             tram_lines.setdefault(tramline,stops)
         return tram_lines'''
 
-
+print(int('10:00') - int('10:02'))
 
 
