@@ -71,6 +71,9 @@ def build_timedict(temp_timedict):
 
 
 def build_tram_network(stopfile, linefile):
+    stops = build_tram_stops(STOP_FILE)
+    lines, times = build_tram_lines(LINE_FILE)
+
     
     pass
 
