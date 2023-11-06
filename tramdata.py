@@ -48,8 +48,7 @@ def build_tram_lines(lines):
         #return tram_lines
         return temp_timedict
     build_timedict(temp_timedict)
-    return timedict
-print(build_tram_lines(LINE_FILE))
+#print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
 def build_timedict(temp_timedict):
@@ -67,7 +66,7 @@ def build_timedict(temp_timedict):
             timedict[current_stop].setdefault(next_stop,diff_time)   
     return timedict
 #build_timedict(build_tram_lines(LINE_FILE))
-#print(build_timedict(build_tram_lines(LINE_FILE)))
+print(build_timedict(build_tram_lines(LINE_FILE)))
 
 
 
