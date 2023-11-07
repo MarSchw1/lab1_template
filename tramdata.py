@@ -56,7 +56,7 @@ def build_tram_lines(lines):
                          
         return line_dict,time_dict
 
-print(build_tram_lines(LINE_FILE))
+#print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
 def build_tram_network(stopfile, linefile):
@@ -69,7 +69,7 @@ def build_tram_network(stopfile, linefile):
         json.dump(data, outfile, ensure_ascii=False, indent=4)
 
     
-#build_tram_network(STOP_FILE,LINE_FILE)
+build_tram_network(STOP_FILE,LINE_FILE)
 
 def lines_via_stop(linedict, stop):
     ## YOUR CODE HERE
