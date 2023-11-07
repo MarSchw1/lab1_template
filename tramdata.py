@@ -20,45 +20,43 @@ def build_tram_stops(jsonobject):
 #print(build_tram_stops(STOP_FILE))
 
 def build_tram_lines(lines):
-    linedict = {}
-    timedict = {}
-    temp_timedict = {}
+    line_dict = {}
+    time_dict = {}
     with open(lines, 'r',encoding="utf-8") as file:
         opened_file = file.readlines()
         A = True
+        prev_station = None
+        prev_time = None
         while A:
             for lines in opened_file:
                 stops = []
                 times = {}
                 if lines[0].isdigit():
                     tramline = lines.strip('\n').replace(":","")
-                    linedict.setdefault(tramline,stops)
-                    temp_timedict.setdefault(tramline,times)
+                    line_dict.setdefault(tramline,stops)
                 if lines[0].isalpha():
                     lines = lines.strip('\n').split()
-                    name = lines[:-1]
-                    time = lines[-1]
-                    if len(name) != 1:
-                        name = " ".join(name)
-                    else: name = name[0]
-                    linedict[tramline].append(name)
-                    temp_timedict[tramline].setdefault(name,time)
+                    stop_name = lines[:-1]
+                    if len(stop_name) != 1:
+                        stop_name = " ".join(stop_name)
+                    else: stop_name = stop_name[0]
+                    line_dict[tramline].append(stop_name)
+
+                    
+                    time = int((lines[-1]).replace(':',''))
+                    if prev_station is not None:
+                        if prev_station not in time_dict.get(prev_station, {}) and prev_station:
+                            time_diff = time - prev_time
+                            time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
+                        prev_station, prev_time = stop_name, time
+                    if prev_station is None:
+                        prev_station, prev_time = stop_name, time
                 if lines[0] in ['\n', ' ']:
                     A = False
-                for tramline in temp_timedict:
-                    stops = list(temp_timedict[tramline].keys())
-                for i in range(len(stops)-1):
-                    current_stop = stops[i]
-                    next_stop = stops[i+1]
-                    current_time = int(temp_timedict[tramline][current_stop].replace(':',''))
-                    next_time = int(temp_timedict[tramline][next_stop].replace(':',''))
-                    diff_time = next_time - current_time 
-                    diff_dict = {}
-                    timedict.setdefault(current_stop,diff_dict)
-                    timedict[current_stop].setdefault(next_stop,diff_time)
+                         
+        return line_dict,time_dict
 
-    return linedict, timedict
-#print(build_tram_lines(LINE_FILE))
+print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
 def build_tram_network(stopfile, linefile):
@@ -71,7 +69,7 @@ def build_tram_network(stopfile, linefile):
         json.dump(data, outfile, ensure_ascii=False, indent=4)
 
     
-build_tram_network(STOP_FILE,LINE_FILE)
+#build_tram_network(STOP_FILE,LINE_FILE)
 
 def lines_via_stop(linedict, stop):
     ## YOUR CODE HERE
