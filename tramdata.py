@@ -61,25 +61,6 @@ def build_tram_lines(lines):
 #print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
-def build_timedict(temp_timedict):
-    timedict = {}
-    for tramline in temp_timedict:
-        stops = list(temp_timedict[tramline].keys())
-        for i in range(len(stops) - 1):
-            current_stop = stops[i]
-            next_stop = stops[i+1]
-            current_time = int(temp_timedict[tramline][current_stop].replace(':',''))
-            next_time = int(temp_timedict[tramline][next_stop].replace(':',''))
-            diff_time = next_time - current_time 
-            diff_dict = {}
-            timedict.setdefault(current_stop,diff_dict)
-            timedict[current_stop].setdefault(next_stop,diff_time)   
-    return timedict
-#build_timedict(build_tram_lines(LINE_FILE))
-#print(build_timedict(build_tram_lines(LINE_FILE)))
-
-
-
 def build_tram_network(stopfile, linefile):
     stops = build_tram_stops(STOP_FILE)
     lines, times = build_tram_lines(LINE_FILE)
