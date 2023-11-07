@@ -997,7 +997,8 @@
             "Botaniska Trädgården": 3
         },
         "Axel Dahlströms Torg": {
-            "Lantmilsgatan": 1
+            "Lantmilsgatan": 1,
+            "Marklandsgatan": -37
         },
         "Lantmilsgatan": {
             "Nymilsgatan": 1
@@ -1012,13 +1013,18 @@
             "Frölunda Torg Spårvagn": 1
         },
         "Frölunda Torg Spårvagn": {
-            "Briljantgatan": 2
+            "Briljantgatan": 2,
+            "Angered Centrum": -43
         },
         "Briljantgatan": {
             "Smaragdgatan": 1
         },
         "Smaragdgatan": {
             "Opaltorget": 0
+        },
+        "Opaltorget": {
+            "Mölndals Innerstad": -38,
+            "Angered Centrum": -51
         },
         "Mölndals Innerstad": {
             "Mölndals sjukhus": 1
@@ -1153,6 +1159,10 @@
         "Sanatoriegatan": {
             "Virginsgatan": 0
         },
+        "Virginsgatan": {
+            "Mölndals Innerstad": -42,
+            "Welandergatan": 2
+        },
         "Berzeliigatan": {
             "Valand": 2
         },
@@ -1174,8 +1184,9 @@
             "Angered Centrum": 3,
             "Hammarkullen": 1
         },
-        "Virginsgatan": {
-            "Welandergatan": 2
+        "Angered Centrum": {
+            "Östra Sjukhuset": -34,
+            "Storås": 3
         },
         "Welandergatan": {
             "Töpelsgatan": 1
@@ -1238,10 +1249,15 @@
             "Väderilsgatan": 1
         },
         "Väderilsgatan": {
-            "Temperaturgatan": 2
+            "Temperaturgatan": 2,
+            "Saltholmen": -31
         },
         "Temperaturgatan": {
             "Varmfrontsgatan": 0
+        },
+        "Varmfrontsgatan": {
+            "Aprilgatan": -42,
+            "Komettorget": -63
         },
         "Aprilgatan": {
             "Allhelgonakyrkan": 1
@@ -1303,7 +1319,8 @@
             "Frihamnen": 1
         },
         "Komettorget": {
-            "Rymdtorget Spårvagn": 2
+            "Rymdtorget Spårvagn": 2,
+            "Saltholmen": -55
         },
         "Rymdtorget Spårvagn": {
             "Teleskopgatan": 1,
@@ -1325,9 +1342,6 @@
             "Chalmers": 1,
             "Vasaplatsen": 2
         },
-        "Angered Centrum": {
-            "Storås": 3
-        },
         "Sannaplan": {
             "Sandarna": 1,
             "Mariaplan": 1
@@ -1335,6 +1349,10 @@
         "Sandarna": {
             "Kungssten": 2,
             "Sannaplan": 1
+        },
+        "Kungssten": {
+            "Doktor Sydows Gata": -34,
+            "Sandarna": 2
         },
         "Doktor Sydows Gata": {
             "Doktor Fries Torg": 1
@@ -1365,9 +1383,6 @@
         },
         "Nya Varvsallén": {
             "Kungssten": 1
-        },
-        "Kungssten": {
-            "Sandarna": 2
         },
         "Ekedal": {
             "Majvallen": 1
