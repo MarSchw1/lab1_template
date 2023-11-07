@@ -10,9 +10,6 @@ def build_lines(linefile):
     timedict = {}
     with open(linefile, 'r', encoding='utf-8') as file:
         lines = file.read().split('\n') 
-        '''lines = file.readlines()
-        for line in lines:
-            line.strip('\n') ''' 
         print(lines)
 
 
