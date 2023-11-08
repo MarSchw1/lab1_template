@@ -69,27 +69,42 @@ def build_tram_network(stopfile, linefile):
     
 #build_tram_network(STOP_FILE,LINE_FILE)
 
-def lines_via_stop(stop): # Ska egentligen vara (linedict, stop)
-    linedict, _ = build_tram_lines(LINE_FILE)
+def lines_via_stop(line_dict, stop): # Ska egentligen vara (linedict, stop)
     stops = []
-    for line in linedict:
-        if stop in linedict.get(line):
+    for line in line_dict:
+        if stop in line_dict.get(line):
             stops.append(line)
     return stops
-#print(lines_via_stop("Marklandsgatan"))
 
-def lines_between_stops(stop1, stop2): #(linedict, stop1, stop2)
-    linedict, _ = build_tram_lines(LINE_FILE)
+
+def lines_between_stops(line_dict,stop1, stop2): #(linedict, stop1, stop2)
     stops = []
-    for line in linedict:
-        if stop1 and stop2 in linedict.get(line):
+    for line in line_dict:
+        if stop1 and stop2 in line_dict.get(line):
             stops.append(line)
     return stops
-print(lines_between_stops("Mölndals Innerstad", "Mölndals sjukhus"))
 
-def time_between_stops(linedict, timedict, line, stop1, stop2):
-    ## YOUR CODE HERE
-    pass
+
+def time_between_stops(line, stop1, stop2): #linedict, timedict, line, stop1, stop2
+    linedict, timedict = build_tram_lines(LINE_FILE)
+    if stop1 in linedict[line] and stop2 in linedict[line]:
+        total_time = 0
+        count_time = False
+        prev_stop = None
+        for stop in linedict.get(line):
+            if stop == stop1:
+                count_time = True
+                prev_stop = stop
+            if stop is not stop1:
+                continue
+            while count_time == True:
+                time = timedict.get(prev_stop).get(stop)
+                total_time += time
+        return total_time
+
+        
+    else: print(f"Sorry {line} does not travel between {stop1} and {stop2}")
+print(time_between_stops("2", "Mölndals Innerstad", "Mölndals sjukhus"))
 
 def distance_between_stops(stopdict, stop1, stop2):
     ## YOUR CODE HERE
