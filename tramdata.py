@@ -25,12 +25,11 @@ def build_tram_lines(lines):
     with open(lines, 'r',encoding="utf-8") as file:
         opened_file = file.readlines()
         A = True
-        prev_station = None
+        prev_station = None # Dessa två måste ligga utanför loopen annars är de lika med None i varje iteration
         prev_time = None
         while A:
             for lines in opened_file:
                 stops = []
-                times = {}
                 if lines[0].isdigit():
                     tramline = lines.strip('\n').replace(":","")
                     line_dict.setdefault(tramline,stops)
@@ -41,7 +40,6 @@ def build_tram_lines(lines):
                         stop_name = " ".join(stop_name)
                     else: stop_name = stop_name[0]
                     line_dict[tramline].append(stop_name)
-
                     
                     time = int((lines[-1]).replace(':',''))
                     if prev_station is not None:
@@ -69,15 +67,25 @@ def build_tram_network(stopfile, linefile):
         json.dump(data, outfile, ensure_ascii=False, indent=4)
 
     
-build_tram_network(STOP_FILE,LINE_FILE)
+#build_tram_network(STOP_FILE,LINE_FILE)
 
-def lines_via_stop(linedict, stop):
-    ## YOUR CODE HERE
-    pass
+def lines_via_stop(stop): # Ska egentligen vara (linedict, stop)
+    linedict, _ = build_tram_lines(LINE_FILE)
+    stops = []
+    for line in linedict:
+        if stop in linedict.get(line):
+            stops.append(line)
+    return stops
+#print(lines_via_stop("Marklandsgatan"))
 
-def lines_between_stops(linedict, stop1, stop2):
-    ## YOUR CODE HERE
-    pass
+def lines_between_stops(stop1, stop2): #(linedict, stop1, stop2)
+    linedict, _ = build_tram_lines(LINE_FILE)
+    stops = []
+    for line in linedict:
+        if stop1 and stop2 in linedict.get(line):
+            stops.append(line)
+    return stops
+print(lines_between_stops("Mölndals Innerstad", "Mölndals sjukhus"))
 
 def time_between_stops(linedict, timedict, line, stop1, stop2):
     ## YOUR CODE HERE
