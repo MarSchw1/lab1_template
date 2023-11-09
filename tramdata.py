@@ -69,7 +69,7 @@ def build_tram_network(stopfile, linefile):
     
 #build_tram_network(STOP_FILE,LINE_FILE)
 
-def lines_via_stop(line_dict, stop): # Ska egentligen vara (linedict, stop)
+def lines_via_stop(line_dict, stop): # (linedict, stop)
     stops = []
     for line in line_dict:
         if stop in line_dict.get(line):
@@ -85,20 +85,18 @@ def lines_between_stops(line_dict,stop1, stop2): #(linedict, stop1, stop2)
     return stops
 
 
-def time_between_stops(line, stop1, stop2): #linedict, timedict, line, stop1, stop2
-    line = '2'
-    stop1 = "Mölndals Innerstad"
-    stop2 = "Lackarebäck"
-    linedict, timedict = build_tram_lines(LINE_FILE)
-    stops = linedict[line]
-    index1, index2 = stops.index(stop1), stops.index(stop2)
-    min, max = sorted(index1,index2)
-    stops = linedict[line][min:max+1]
-    
-
-        
+def time_between_stops(linedict, timedict, line, stop1, stop2): #linedict, timedict, line, stop1, stop2
+    if stop1 in linedict[line] and stop2 in linedict[line]:
+        #linedict, timedict = build_tram_lines(LINE_FILE)
+        stops = linedict[line]
+        index1, index2 = stops.index(stop1), stops.index(stop2)
+        route = stops[min(index1,index2):max(index1,index2) +1]
+        time = 0
+        for i in range(len(route)-1):
+            time += timedict[route[i]][route[i+1]]
+        return time
     else: print(f"Sorry {line} does not travel between {stop1} and {stop2}")
-print(time_between_stops("2", "Mölndals Innerstad", "Lackarebäck"))
+print(time_between_stops("1", "Östra Sjukhuset", "Härlanda"))
 
 def distance_between_stops(stopdict, stop1, stop2):
     ## YOUR CODE HERE
