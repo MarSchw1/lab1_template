@@ -86,25 +86,19 @@ def lines_between_stops(line_dict,stop1, stop2): #(linedict, stop1, stop2)
 
 
 def time_between_stops(line, stop1, stop2): #linedict, timedict, line, stop1, stop2
+    line = '2'
+    stop1 = "Mölndals Innerstad"
+    stop2 = "Lackarebäck"
     linedict, timedict = build_tram_lines(LINE_FILE)
-    if stop1 in linedict[line] and stop2 in linedict[line]:
-        total_time = 0
-        count_time = False
-        prev_stop = None
-        for stop in linedict.get(line):
-            if stop == stop1:
-                count_time = True
-                prev_stop = stop
-            if stop is not stop1:
-                continue
-            while count_time == True:
-                time = timedict.get(prev_stop).get(stop)
-                total_time += time
-        return total_time
+    stops = linedict[line]
+    index1, index2 = stops.index(stop1), stops.index(stop2)
+    min, max = sorted(index1,index2)
+    stops = linedict[line][min:max+1]
+    
 
         
     else: print(f"Sorry {line} does not travel between {stop1} and {stop2}")
-print(time_between_stops("2", "Mölndals Innerstad", "Mölndals sjukhus"))
+print(time_between_stops("2", "Mölndals Innerstad", "Lackarebäck"))
 
 def distance_between_stops(stopdict, stop1, stop2):
     ## YOUR CODE HERE
