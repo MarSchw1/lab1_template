@@ -106,4 +106,18 @@ print(build_tram_lines(LINE_FILE))
     return timedict'''
 
 
-
+'''   linedict, timedict = build_tram_lines(LINE_FILE)
+    if stop1 in linedict[line] and stop2 in linedict[line]:
+        total_time = 0
+        count_time = False
+        prev_stop = None
+        for stop in linedict.get(line):
+            if stop == stop1:
+                count_time = True
+                prev_stop = stop
+            if stop stop1:
+                continue
+            while count_time == True:
+                time = timedict.get(prev_stop).get(stop)
+                total_time += time
+        return total_time'''
