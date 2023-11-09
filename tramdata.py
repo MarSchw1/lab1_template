@@ -44,8 +44,7 @@ def build_tram_lines(lines):
                     time_diff = time - prev_time
                     if time_diff >= 0:
                         time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
-                prev_station, prev_time = stop_name, time
-                prev_station, prev_time = stop_name, time   
+                prev_station, prev_time = stop_name, time 
 
                          
         return line_dict, time_dict
