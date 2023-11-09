@@ -1,5 +1,6 @@
 import sys
 import json
+import math
 
 
 # files given
@@ -33,6 +34,7 @@ def build_tram_lines(lines):
                 if lines[0].isdigit():
                     tramline = lines.strip('\n').replace(":","")
                     line_dict.setdefault(tramline,stops)
+                    prev_station, prev_time = None, None
                 if lines[0].isalpha():
                     lines = lines.strip('\n').split()
                     stop_name = lines[:-1]
@@ -41,20 +43,22 @@ def build_tram_lines(lines):
                     else: stop_name = stop_name[0]
                     line_dict[tramline].append(stop_name)
                     
-                    time = int((lines[-1]).replace(':',''))
+                    time = float((lines[-1]).replace(':',''))
                     if prev_station is not None:
                         if prev_station not in time_dict.get(prev_station, {}) and prev_station:
                             time_diff = time - prev_time
-                            time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
+                            if time_diff >= 0:
+                                time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
                         prev_station, prev_time = stop_name, time
                     if prev_station is None:
-                        prev_station, prev_time = stop_name, time
+                        prev_station, prev_time = stop_name, time   
+
                 if lines[0] in ['\n', ' ']:
                     A = False
                          
-        return line_dict,time_dict
+        return time_dict
 
-#print(build_tram_lines(LINE_FILE))
+print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
 def build_tram_network(stopfile, linefile):
@@ -86,21 +90,36 @@ def lines_between_stops(line_dict,stop1, stop2): #(linedict, stop1, stop2)
 
 
 def time_between_stops(linedict, timedict, line, stop1, stop2): #linedict, timedict, line, stop1, stop2
-    if stop1 in linedict[line] and stop2 in linedict[line]:
-        #linedict, timedict = build_tram_lines(LINE_FILE)
-        stops = linedict[line]
-        index1, index2 = stops.index(stop1), stops.index(stop2)
-        route = stops[min(index1,index2):max(index1,index2) +1]
-        time = 0
-        for i in range(len(route)-1):
-            time += timedict[route[i]][route[i+1]]
-        return time
-    else: print(f"Sorry {line} does not travel between {stop1} and {stop2}")
-print(time_between_stops("1", "Östra Sjukhuset", "Härlanda"))
+    if line in linedict:
+        if stop1 in linedict[line] and stop2 in linedict[line]:
+            #linedict, timedict = build_tram_lines(LINE_FILE)
+            stops = linedict[line]
+            index1, index2 = stops.index(stop1), stops.index(stop2)
+            route = stops[min(index1,index2):max(index1,index2) +1]
+            time = 0
+            for i in range(len(route)-1):
+                time += timedict[route[i]][route[i+1]]
+            return time
+        else: print(f"Sorry {line} does not travel between {stop1} and {stop2}")
+    else: print(f"There is no line called {line} in {linedict}")
+#print(time_between_stops("1", "Östra Sjukhuset", "Härlanda"))
 
 def distance_between_stops(stopdict, stop1, stop2):
-    ## YOUR CODE HERE
-    pass
+    R = 6371.009
+    lat1, long1 = float(stopdict[stop1]["lat"]),float(stopdict[stop1]["long"])
+    lat2, long2 = float(stopdict[stop2]["lat"]),float(stopdict[stop2]["long"])
+    diff_lat, diff_long = ((lat1) - (lat2))*(math.pi/180), ((long1) - (long2))*(math.pi/180)
+    lat_mean = ((lat1 + lat2) / 2)*(math.pi/180)
+    D = R * math.sqrt(diff_lat**2 + (math.cos(lat_mean)*diff_long)**2)
+    return round(D,3)
+
+#print(distance_between_stops(build_tram_stops(STOP_FILE), "Rymdtorget Spårvagn", "Hagakyrkan"))
+
+    
+
+
+    
+
 
 def answer_query(tramdict, query):
     ## YOUR CODE HERE
