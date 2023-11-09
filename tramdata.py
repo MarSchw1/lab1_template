@@ -25,40 +25,32 @@ def build_tram_lines(lines):
     time_dict = {}
     with open(lines, 'r',encoding="utf-8") as file:
         opened_file = file.readlines()
-        A = True
-        prev_station = None # Dessa två måste ligga utanför loopen annars är de lika med None i varje iteration
-        prev_time = None
-        while A:
-            for lines in opened_file:
-                stops = []
-                if lines[0].isdigit():
-                    tramline = lines.strip('\n').replace(":","")
-                    line_dict.setdefault(tramline,stops)
-                    prev_station, prev_time = None, None
-                if lines[0].isalpha():
-                    lines = lines.strip('\n').split()
-                    stop_name = lines[:-1]
-                    if len(stop_name) != 1:
-                        stop_name = " ".join(stop_name)
-                    else: stop_name = stop_name[0]
-                    line_dict[tramline].append(stop_name)
-                    
-                    time = float((lines[-1]).replace(':',''))
-                    if prev_station is not None:
-                        if prev_station not in time_dict.get(prev_station, {}) and prev_station:
-                            time_diff = time - prev_time
-                            if time_diff >= 0:
-                                time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
-                        prev_station, prev_time = stop_name, time
-                    if prev_station is None:
-                        prev_station, prev_time = stop_name, time   
+        for lines in opened_file:
+            stops = []
+            if lines[0].isdigit():
+                tramline = lines.strip('\n').replace(":","")
+                line_dict.setdefault(tramline,stops)
+                prev_station, prev_time = None, None
+            if lines[0].isalpha():
+                lines = lines.strip('\n').split()
+                stop_name = lines[:-1]
+                if len(stop_name) != 1:
+                    stop_name = " ".join(stop_name)
+                else: stop_name = stop_name[0]
+                line_dict[tramline].append(stop_name)
+                
+                time = float((lines[-1]).replace(':',''))
+                if prev_station not in time_dict.get(prev_station, {}) and prev_station:
+                    time_diff = time - prev_time
+                    if time_diff >= 0:
+                        time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
+                prev_station, prev_time = stop_name, time
+                prev_station, prev_time = stop_name, time   
 
-                if lines[0] in ['\n', ' ']:
-                    A = False
                          
-        return time_dict
+        return line_dict, time_dict
 
-print(build_tram_lines(LINE_FILE))
+#print(build_tram_lines(LINE_FILE))
 #build_tram_lines(LINE_FILE)
 
 def build_tram_network(stopfile, linefile):
@@ -71,7 +63,7 @@ def build_tram_network(stopfile, linefile):
         json.dump(data, outfile, ensure_ascii=False, indent=4)
 
     
-#build_tram_network(STOP_FILE,LINE_FILE)
+build_tram_network(STOP_FILE,LINE_FILE)
 
 def lines_via_stop(line_dict, stop): # (linedict, stop)
     stops = []
@@ -115,19 +107,46 @@ def distance_between_stops(stopdict, stop1, stop2):
 
 #print(distance_between_stops(build_tram_stops(STOP_FILE), "Rymdtorget Spårvagn", "Hagakyrkan"))
 
-    
-
-
-    
-
 
 def answer_query(tramdict, query):
-    ## YOUR CODE HERE
-    pass
+    question = query.strip().split()
+    if question[0] == 'via':
+        stop = ' '.join(question[1:])
+        answer = lines_via_stop(tramdict['lines'], stop)
+    
+    elif question[0] == 'between':
+        pos_and = question.index('and')
+        stop1,stop2 = question[1:pos_and], question[pos_and+1:]
+        answer = lines_between_stops(tramdict['lines'],stop1,stop2)
+
+    elif question[0] == 'time':
+        line = question[2]
+        pos_to, pos_from = question.intex('to'),question.intex('from')
+        stop1, stop2 = ' '.join(question[pos_from:pos_to]), ' '.join(question[pos_to:])
+        answer = time_between_stops(tramdict['lines'],tramdict['times'],stop1, stop2)
+
+    elif question[0] == 'distance':
+        pos_to, pos_from = question.intex('to'),question.intex('from')
+        stop1, stop2 = ' '.join(question[pos_from:pos_to]), ' '.join(question[pos_to:])
+        answer = distance_between_stops(tramdict['stops'],stop1,stop2)
+
+    else: aswer = False
+
+    return answer
+        
 
 def dialogue(tramfile=TRAM_FILE):
-    ## YOUR CODE HERE
-    pass
+    '''with open(tramfile,encoding='utf-8') as file:
+        data = json.load(file)
+    while True:
+        prompt = input('>')
+        if prompt == 'quit': break
+        answer = answer_query(data, prompt)
+        if answer == False:
+            print('sorry, try again')
+        elif answer == []:
+            print('unknown argument')'''
+        
 
 if __name__ == '__main__':
     if sys.argv[1:] == ['init']:
