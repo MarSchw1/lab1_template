@@ -24,45 +24,6 @@ LINE_FILE = './data/tramlines.txt'
                     stopName = ' '.join(e[:-1])
                     time = e[-1].replace(':','')
                     linedict[tramNr].append(stopName)'''
-def build_tram_lines(lines):
-    line_dict = {}
-    time_dict = {}
-    with open(lines, 'r',encoding="utf-8") as file:
-        opened_file = file.readlines()
-        A = True
-        prev_station = None
-        prev_time = None
-        while A:
-            for lines in opened_file:
-                stops = []
-                times = {}
-                if lines[0].isdigit():
-                    tramline = lines.strip('\n').replace(":","")
-                    line_dict.setdefault(tramline,stops)
-                if lines[0].isalpha():
-                    lines = lines.strip('\n').split()
-                    stop_name = lines[:-1]
-                    if len(stop_name) != 1:
-                        stop_name = " ".join(stop_name)
-                    else: stop_name = stop_name[0]
-                    line_dict[tramline].append(stop_name)
-
-                    
-                    time = int((lines[-1]).replace(':',''))
-                    if prev_station is not None:
-                        if prev_station not in time_dict.get(prev_station, {}) and prev_station:
-                            time_diff = time - prev_time
-                            time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
-                        prev_station, prev_time = stop_name, time
-                    if prev_station is None:
-                        prev_station, prev_time = stop_name, time
-                if lines[0] in ['\n', ' ']:
-                    A = False
-                         
-        return line_dict,time_dict
-
-print(build_tram_lines(LINE_FILE))
-#build_lines(LINE_FILE)       
 
 #Denna funktion fick vi inte ha eftersom vi tekniskt sett läser datan 2 gånger när vi skapar temp_timedict.
 '''def build_tram_lines(lines):
@@ -121,3 +82,48 @@ print(build_tram_lines(LINE_FILE))
                 time = timedict.get(prev_stop).get(stop)
                 total_time += time
         return total_time'''
+
+def build_tram_lines(FILE):
+    line_dict = {}
+    time_dict = {}
+    with open(FILE, 'r',encoding="utf-8") as file:
+        opened_file = file.readlines()
+        for i,line in enumerate(opened_file):
+            stops = []
+            if line[0].isdigit():
+                tramline = line.strip('\n').replace(":","")
+                line_dict.setdefault(tramline,stops)
+                prev_station = None
+            if line[0].isalpha():
+                line = line.strip('\n').split()
+                stop_name = line[:-1]
+                if len(stop_name) != 1:
+                    stop_name = " ".join(stop_name)
+                else: stop_name = stop_name[0]
+                line_dict[tramline].append(stop_name)
+                
+                time = int((line[-1]).replace(':',''))
+                if prev_station == None: 
+                    prev_station, prev_time = stop_name, time
+                    time_dict.setdefault(prev_station,{})
+                if prev_station not in time_dict.get(prev_station, {}):
+                    time_diff = time - prev_time
+                    if time_diff >= 0:
+                        time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
+                prev_station, prev_time = stop_name, time 
+
+                         
+        return line_dict, time_dict
+
+#print(build_tram_lines(LINE_FILE))
+#build_tram_lines(LINE_FILE)
+
+def build_tram_network(stopfile, linefile):
+    stops = build_tram_stops(STOP_FILE)
+    line, times = build_tram_lines(LINE_FILE)
+
+    data = {"stops": stops, "line":line, "times":times}
+
+    with open("tramnetwork.json" , 'w',encoding='utf-8') as outfile:
+        json.dump(data, outfile, ensure_ascii=False, indent=4)
+    print('Done')
