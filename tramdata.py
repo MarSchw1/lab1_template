@@ -40,10 +40,10 @@ def build_tram_lines(FILE):
                 line_dict[tramline].append(stop_name)
                 
                 time = int((line[-1]).replace(':',''))
-                if prev_station == None:
-                    prev_station, prev_time = stop_name, time
+                #if prev_station == None:
+                    #prev_station, prev_time = stop_name, time
 
-                elif stop_name not in time_dict.get(prev_station, {}) and prev_station not in time_dict.get(stop_name, {}):
+                if stop_name not in time_dict.get(prev_station, {}) and prev_station not in time_dict.get(stop_name, {}):
                     time_diff = time - prev_time
                     if time_diff >= 0:
                         time_dict.setdefault(prev_station,{}).setdefault(stop_name, time_diff)
@@ -98,7 +98,10 @@ def time_between_stops(linedict, timedict, line, stop1, stop2):
             route = stops[min(index1,index2):max(index1,index2) +1]
             time = 0
             for i in range(len(route)-1):
-                time += timedict[route[i]][route[i+1]]
+                if route[i+1] not in timedict[route[i]]: 
+                    time += timedict[route[i+1]][route[i]]
+                else:
+                    time += timedict[route[i]][route[i+1]]
             return time
         else: return False
     else: return False
@@ -159,8 +162,15 @@ def dialogue(tramfile=TRAM_FILE):
             print(answer)
             break
 
+def oscarvisar():
+    lista = [1,2,3,4,5]
+    lista=lista.remove(1)
+    print(lista)
+
+
 if __name__ == '__main__':
     if sys.argv[1:] == ['init']:
         build_tram_network(STOP_FILE,LINE_FILE)
     else:
         dialogue()
+
