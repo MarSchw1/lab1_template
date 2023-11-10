@@ -63,7 +63,7 @@ def build_tram_network(stopfile, linefile):
 
     with open("tramnetwork.json" , 'w',encoding='utf-8') as outfile:
         json.dump(data, outfile, ensure_ascii=False, indent=4)
-    print('Done')
+    #bprint('Done')
 
     
 #build_tram_network(STOP_FILE,LINE_FILE)
@@ -90,7 +90,7 @@ def lines_between_stops(line_dict,stop1, stop2): #(linedict, stop1, stop2)
 #lines_between_stops(data['line'],"Lackarebäck","Korsvägen")
 
 
-def time_between_stops(linedict, timedict, line, stop1, stop2): #linedict, timedict, line, stop1, stop2
+def time_between_stops(linedict, timedict, line, stop1, stop2):
     if line in linedict:
         if stop1 in linedict[line] and stop2 in linedict[line]:
             stops = linedict[line]
@@ -126,18 +126,17 @@ def answer_query(tramdict, query):
     
     elif question[0] == 'between':
         pos_and = question.index('and')
-        stop1,stop2 = question[1:pos_and], question[pos_and+1:]
+        stop1,stop2 = ' '.join(question[1:pos_and]), ' '.join(question[pos_and+1:])
         answer = lines_between_stops(tramdict['line'],stop1,stop2)
 
     elif question[0] == 'time':
-        line = question[2]
-        pos_to, pos_from = question.index('to'),question.index('from')
-        stop1, stop2 = ' '.join(question[pos_from:pos_to]), ' '.join(question[pos_to:])
-        answer = time_between_stops(tramdict['line'],tramdict['times'],stop1, stop2)
-
+            line = question[2]
+            pos_to, pos_from = question.index('to'),question.index('from')
+            stop1, stop2 = ' '.join(question[pos_from +1 :pos_to]), ' '.join(question[pos_to +1:])
+            answer = time_between_stops(tramdict['line'],tramdict['times'],line, stop1, stop2)
     elif question[0] == 'distance':
         pos_to, pos_from = question.index('to'),question.index('from')
-        stop1, stop2 = ' '.join(question[pos_from:pos_to]), ' '.join(question[pos_to:])
+        stop1, stop2 = ' '.join(question[pos_from+1:pos_to]), ' '.join(question[pos_to+1:])
         answer = distance_between_stops(tramdict['stops'],stop1,stop2)
 
     else: answer = None
