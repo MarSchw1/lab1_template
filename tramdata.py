@@ -162,11 +162,6 @@ def dialogue(tramfile=TRAM_FILE):
             print(answer)
             break
 
-def oscarvisar():
-    lista = [1,2,3,4,5]
-    lista=lista.remove(1)
-    print(lista)
-
 
 if __name__ == '__main__':
     if sys.argv[1:] == ['init']:
