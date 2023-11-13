@@ -133,10 +133,11 @@ def answer_query(tramdict, query):
         answer = lines_between_stops(tramdict['line'],stop1,stop2)
 
     elif question[0] == 'time':
-            line = question[2]
-            pos_to, pos_from = question.index('to'),question.index('from')
-            stop1, stop2 = ' '.join(question[pos_from +1 :pos_to]), ' '.join(question[pos_to +1:])
-            answer = time_between_stops(tramdict['line'],tramdict['times'],line, stop1, stop2)
+        line = question[2]
+        pos_to, pos_from = question.index('to'),question.index('from')
+        stop1, stop2 = ' '.join(question[pos_from +1 :pos_to]), ' '.join(question[pos_to +1:])
+        answer = time_between_stops(tramdict['line'],tramdict['times'],line, stop1, stop2)
+        
     elif question[0] == 'distance':
         pos_to, pos_from = question.index('to'),question.index('from')
         stop1, stop2 = ' '.join(question[pos_from+1:pos_to]), ' '.join(question[pos_to+1:])
